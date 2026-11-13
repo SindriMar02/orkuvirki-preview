@@ -27,7 +27,7 @@ figure{margin:0}
 button,input,textarea{font:inherit;color:inherit;letter-spacing:inherit}
 /* focus ring: ink on light, grey and orange grounds (orange on paper is only 1.9:1), orange on dark grounds (8.25:1) */
 :focus-visible{outline:2px solid var(--ring,var(--ink));outline-offset:3px}
-.foot,.tl,.phead,.plate,.sheet,.inside-static,.door_in{--ring:var(--orange)}
+.foot,.tl,.phead,.plate,.sheet{--ring:var(--orange)}
 :root{color-scheme:light}
 html{-webkit-tap-highlight-color:rgba(250,145,57,.22)}
 a,button,label,input,textarea{touch-action:manipulation}
@@ -84,37 +84,19 @@ html[data-input="pointer"] :focus-visible:not(input):not(textarea):not(select):n
 .burger,.sheet{display:none}
 @media (hover:hover) and (pointer:fine){.seg:hover,.seg_btn:hover,.bar_tile:hover{background:#fff}.seg_panel a:hover{background:var(--cabinet)}}
 
-/* ---------- the door: first screen and signature scene ---------- */
-.door{position:relative;background:var(--door)}
-.door_stage{position:relative;height:100svh;min-height:540px;overflow:hidden}
-.door_media{position:absolute;left:0;top:0;height:max(100%,66.667vw);aspect-ratio:3/2;perspective:1800px;perspective-origin:28% 50%}
-.door_media img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
-.door_inside,.door_leaf{position:absolute;inset:0;clip-path:polygon(1.42% 14.75%,54.17% 21.38%,55.17% 100%,1.58% 100%)}
-.door_inside{display:none;background:#0b0b0b}
-.door_media .door_cu{left:1.42%;top:14.75%;width:53.75%;height:85.25%;object-position:50% 28%;filter:brightness(.6)}
-.door_leaf{--shade:0;transform-origin:1.5% 50%;backface-visibility:hidden;-webkit-backface-visibility:hidden}
-.door_leaf:after{content:"";position:absolute;inset:0;background:#000;opacity:var(--shade);pointer-events:none}
-.door_copy{position:absolute;left:var(--edge);top:41.3svh;height:calc(58.7svh - 44px);min-height:240px;width:calc(100vw - var(--edge) - 16px);display:flex;flex-direction:column;align-items:flex-start;color:var(--ink)}
-.door_h1{font-size:clamp(40px,5.83vw,112px);line-height:1.05;letter-spacing:-.035em;word-spacing:.06em}
-.door_spec{display:flex;flex-wrap:wrap;gap:2px 28px;margin-top:clamp(18px,2.2vw,40px)}
-.door_lede{margin:auto 0 0;max-width:23.5em;font-size:clamp(16px,1.18vw,22px);line-height:1.42}
-.door_in{position:absolute;left:var(--edge);top:27svh;width:min(42vw,600px);padding:clamp(18px,1.8vw,30px) clamp(18px,2vw,34px) clamp(20px,2vw,34px);border-radius:3px;background:var(--plate);color:#f4f4f2}
-.door_in-p{margin-top:1.2em;max-width:22em}
-.card{--cw:clamp(340px,25.83vw,500px);position:absolute;z-index:3;right:16px;bottom:16px;width:var(--cw);min-height:clamp(116px,8.61vw,166px);padding:clamp(12px,.97vw,18px) calc(var(--cw)*.3 + 20px) clamp(12px,.97vw,18px) clamp(14px,1.25vw,24px);border-radius:4px;background:var(--orange);color:var(--ink);text-decoration:none;display:block}
-.card_l{display:flex;align-items:center;gap:7px}.card_l:before{content:"";width:6px;height:6px;border-radius:50%;background:var(--ink)}
-.card_p{display:block;margin-top:8px;font-size:clamp(16px,1.18vw,22px);line-height:1.3}
-.card_th{position:absolute;right:6px;top:6px;bottom:6px;width:30%;border-radius:3px;overflow:hidden}
-.card_th img{width:100%;height:100%;object-fit:cover;object-position:50% 10%;transform:scale(1.9);transform-origin:50% 12%;transition:transform .8s var(--ease-out)}
-@media (hover:hover) and (pointer:fine){.card:hover .card_th img{transform:scale(2.05)}}
-.inside-static{background:var(--night);color:var(--off);display:grid;grid-template-columns:1fr 1fr;align-items:center}
-.inside-static img{width:100%;height:min(80svh,60vw);object-fit:cover;object-position:50% 28%}
-.inside-static div{padding:var(--o) calc(var(--o)*2)}
-.inside-static p:last-child{margin-top:1.2em;max-width:22em}
-/* with motion: the stage pins and the scroll opens the door */
-.js-motion .door{height:260svh}
-.js-motion .door_stage{position:sticky;top:0}
-.js-motion .door_inside{display:block}
-.js-motion .inside-static{display:none}
+/* ---------- first screen: their photograph, their headline, two actions, three facts ---------- */
+.hero_pic img{width:100%;height:100%;object-fit:cover}
+.hero_h1{font-size:clamp(44px,6.25vw,120px);line-height:1.02;letter-spacing:-.04em;word-spacing:.06em}
+.hero_lede{max-width:24em;margin:clamp(18px,1.9vw,34px) 0 0;font-size:clamp(17px,1.32vw,24px);line-height:1.4}
+.hero_cta{display:flex;flex-wrap:wrap;gap:8px;margin:clamp(22px,2.2vw,40px) 0 0}
+.hero_facts{display:flex;flex-wrap:wrap;gap:4px 28px;list-style:none;margin:0;padding:0}
+.hero_facts li{display:flex;align-items:center;gap:8px}.hero_facts li:before{content:"";width:6px;height:6px;border-radius:50%;background:var(--orange)}
+/* copy on paper in columns 1 to 10, the aisle photograph in 11 to 24 */
+.hero{position:relative;overflow:hidden;min-height:100svh;display:grid;grid-template-columns:repeat(24,minmax(0,1fr));column-gap:var(--g);padding:72px 16px 16px var(--o);background:var(--paper)}
+.hero_copy{grid-column:1/11;display:flex;flex-direction:column;align-items:flex-start;padding:clamp(48px,11svh,140px) 0 8px}
+.hero_facts{margin-top:auto;padding-top:28px;flex-direction:column;gap:6px}
+.hero_pic{grid-column:11/25;min-height:calc(100svh - 88px);border-radius:3px;overflow:hidden;background:var(--cabinet)}
+.hero_pic img{object-position:62% 50%}
 
 /* ---------- statement ---------- */
 .statement{background:var(--orange);padding:clamp(72px,9vw,168px) var(--o);display:grid;grid-template-columns:repeat(24,minmax(0,1fr));column-gap:var(--g)}
@@ -301,7 +283,7 @@ html[data-input="pointer"] :focus-visible:not(input):not(textarea):not(select):n
 .tip{scroll-margin-top:72px}
 
 /* ---------- motion: hidden start states exist only while the script is running (class set in <head>) ---------- */
-.js-motion.pre .is-home .door_media,.js-motion.pre .is-home .door_copy,.js-motion.pre .is-home .card,.js-motion.pre .is-home .bar,.js-motion.pre .phead_pic img{opacity:0}
+.js-motion.pre .hero_h1,.js-motion.pre [data-hero-in],.js-motion.pre .phead_pic img{opacity:0}
 .js-motion [data-in]{opacity:0}
 .js-motion [data-lines]{visibility:hidden}
 .js-motion [data-fade]{opacity:0}
@@ -333,18 +315,15 @@ html[data-input="pointer"] :focus-visible:not(input):not(textarea):not(select):n
   .sheet_foot{margin:auto 0 0;padding-top:22px;display:grid;gap:4px;font-size:19px}
   .sheet_foot a{display:flex;align-items:center;min-height:44px;text-decoration:none}
 
-  /* the stage starts right under the 64px bar (the awning covers its top 42px at rest) and always ends at the fold */
-  .door{margin-top:-42px}
-  /* The picture runs to the large viewport so nothing shows under it when Safari's toolbar collapses; the text and the
-     card are placed in small-viewport units, so they are inside the first screen with the toolbar showing. */
-  .door_stage{height:calc(100lvh - 64px);min-height:480px}
-  .js-motion .door{height:calc(230svh - 64px)}
-  .js-motion .door_stage{top:64px}
-  .door_copy{top:calc(33svh - 20px);height:calc(67svh - 64px - 132px + 20px);min-height:0;width:calc(100vw - var(--edge) - 12px)}
-  .door_in{top:24svh;width:calc(100vw - var(--edge) - 16px)}
-  .card{left:12px;right:12px;bottom:calc(12px + 100lvh - 100svh);width:auto;min-height:104px;padding:12px 112px 12px 14px}
-  .card_th{width:92px}.card_p{font-size:16px;line-height:21px}
-  .inside-static{grid-template-columns:1fr}.inside-static img{height:70vw}.inside-static div{padding:36px var(--o) 48px}
+  /* first screen starts right under the 64px bar (the awning covers its top 42px at rest) */
+  .hero{margin-top:-42px}
+  .hero_h1{font-size:clamp(40px,11.2vw,52px)}
+  .hero_lede{font-size:17px}
+  .hero_cta .btn{flex:1 1 auto}
+  .hero{display:flex;flex-direction:column;min-height:0;padding:0}
+  .hero_pic{order:-1;min-height:0;height:44svh;border-radius:0}
+  .hero_copy{padding:28px var(--o) 32px}
+  .hero_facts{margin-top:24px;padding-top:0}
 
   .statement,.cta{display:block}
   .statement .mono,.cta .mono{margin-bottom:18px;padding-top:0}

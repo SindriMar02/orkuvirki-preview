@@ -83,22 +83,6 @@
       window.__lenis = lenis;
     }
 
-    /* M3 the door opens: scrubbed, reversible. The stage is pinned by CSS sticky inside a 260svh wrapper. */
-    var door = $('[data-door]');
-    if (door) {
-      var leaf = $('.door_leaf', door), cu = $('.door_cu', door), plate = $('.door_in', door), inn = $$('.door_in > *', door);
-      gsap.set(plate, { autoAlpha: 0, y: 40 }); gsap.set(inn, { autoAlpha: 0 });
-      var stickTop = function () { return parseFloat(getComputedStyle($('.door_stage', door)).top) || 0; };   // 0 on desktop, 64 under the phone bar
-      gsap.timeline({ defaults: { ease: 'none' }, scrollTrigger: { trigger: door, start: function () { return 'top ' + stickTop() + 'px'; }, end: 'bottom bottom', scrub: true, invalidateOnRefresh: true } })
-        .to({}, { duration: 0.06 })
-        .to(leaf, { rotateY: -96, duration: 0.6, ease: 'power1.inOut' }, 'open')
-        .to(leaf, { '--shade': 0.5, duration: 0.5 }, 'open')
-        .fromTo(cu, { scale: 1.1 }, { scale: 1, duration: 0.6 }, 'open')
-        .to(plate, { autoAlpha: 1, y: 0, duration: 0.16, ease: 'power2.out' }, 'open+=0.38')
-        .to(inn, { autoAlpha: 1, duration: 0.1, stagger: 0.04 }, 'open+=0.44')
-        .to({}, { duration: 0.14 });
-    }
-
     function lines(el, vars) {              // ON Energy's line reveal: y 40 → 0, 1s, power3.out, stagger .08, delay .15
       if (!Split) { el.style.visibility = 'visible'; return; }
       Split.create(el, { type: 'lines', linesClass: 'ln', autoSplit: true, onSplit: function (self) {
@@ -107,24 +91,20 @@
       } });
     }
 
-    // The first picture is decoded before anything arrives, so the opening never plays over an empty frame.
-    var first = $('.door_base') || $('.phead_pic img');
-    var decoded = first && first.decode ? first.decode().catch(function () {}) : Promise.resolve();
+    // Page heads wait for their picture so it never fades in over an empty frame. The home first screen waits only for
+    // the fonts: the headline lines rise, then the lede, the actions and the facts. Nothing scrubs, nothing is held for
+    // the picture (Sindri 13 Nov: "no weird introductions").
+    var headPic = $('.phead_pic img');
+    var decoded = headPic && headPic.decode ? headPic.decode().catch(function () {}) : Promise.resolve();
     Promise.all([document.fonts.ready, decoded]).then(function () {
-      /* M1 opening (home): picture, bar, headline lines, lede, card. Skipped when the page loads mid-scroll.
-         Until here the pieces are held invisible by html.pre (set in <head>), so nothing flashes before it arrives. */
-      var h1 = $('.door_h1'), atTop = window.scrollY < 40, headPic = $('.phead_pic img');
+      /* M1 arrival. Skipped when the page loads mid-scroll. Until here the pieces are held by html.pre (set in <head>). */
+      var atTop = window.scrollY < 40, h1 = $('.hero_h1');
       if (headPic && atTop) gsap.from(headPic, { scale: 1.06, autoAlpha: 0, duration: 1.4, ease: 'expo.out', clearProps: 'all' });
-      if (h1 && atTop) {
-        gsap.from('.door_media', { scale: 1.04, autoAlpha: 0, duration: 1.2, ease: 'expo.out', clearProps: 'transform,opacity,visibility' });
-        gsap.from('.bar', { y: -16, autoAlpha: 0, duration: 0.8, ease: 'expo.out', delay: 0.1, clearProps: 'all' });
-        if (Split) {
-          var sp = Split.create(h1, { type: 'lines', linesClass: 'ln' });
-          gsap.from(sp.lines, { y: 40, autoAlpha: 0, duration: 1, ease: 'power3.out', stagger: 0.08, delay: 0.25, onComplete: function () { sp.revert(); } });
-        }
-        gsap.from(['.door_spec', '.door_lede'], { autoAlpha: 0, duration: 0.6, ease: 'sine.out', delay: 0.6, stagger: 0.1, clearProps: 'opacity,visibility' });
-        gsap.from('.card', { y: 24, autoAlpha: 0, duration: 0.6, ease: 'power3.out', delay: 0.5, clearProps: 'all' });
+      if (h1 && atTop && Split) {
+        var sp = Split.create(h1, { type: 'lines', linesClass: 'ln' });
+        gsap.from(sp.lines, { y: 40, autoAlpha: 0, duration: 0.9, ease: 'power3.out', stagger: 0.08, delay: 0.05, onComplete: function () { sp.revert(); } });
       }
+      if (atTop && $('[data-hero-in]')) gsap.from('[data-hero-in]', { y: 16, autoAlpha: 0, duration: 0.7, ease: 'power3.out', stagger: 0.08, delay: 0.3, clearProps: 'all' });
       root.classList.remove('pre');
       /* M9 roster: portraits and names fade in by rows, nothing travels (55 names are for scanning) */
       ST.batch('[data-in]', { start: 'top 95%', once: true, onEnter: function (b) { gsap.to(b, { autoAlpha: 1, duration: 0.5, ease: 'sine.out', stagger: 0.04, overwrite: true }); } });
